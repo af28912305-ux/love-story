@@ -137,7 +137,7 @@
     const { data, error } = await client
       .from('memories')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('id', { ascending: true })
     if (!error && data) {
       allMemories = data
       displayMemories(allMemories)
