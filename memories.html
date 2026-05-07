@@ -38,6 +38,20 @@
       padding: 48px;
       color: #D4A574;
     }
+    .tooltip {
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      background: #D4A574;
+      color: #0D0D0D;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -74,7 +88,9 @@
   </div>
 </div>
 
-<button class="add-btn-fixed" id="openModalBtn">➕</button>
+<button class="add-btn-fixed" id="openModalBtn">➕
+  <span class="tooltip" id="tooltip">📝 اضغط هنا لاضافة ذكرى جديدة</span>
+</button>
 
 <div id="addMemoryModal" class="modal">
   <div class="modal-content">
@@ -96,7 +112,6 @@
 
 <script src="script.js"></script>
 <script>
-  // Supabase configuration - same as supabase.js but local
   const SUPABASE_URL = 'https://jzxlvwxekcrnqsfwxnny.supabase.co'
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGx2d3hla2NybnFzZnd4bm55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNTUxNzAsImV4cCI6MjA5MzczMTE3MH0.uDrBInXP3i8GvGxaNCQey-T3uDidUfeBsr6PUFFTJyQ'
   
@@ -205,7 +220,17 @@
     }
   })
 
-  // Start loading
+  // Show tooltip for 2 seconds
+  setTimeout(() => {
+    const tooltip = document.getElementById('tooltip')
+    if (tooltip) {
+      tooltip.style.opacity = '1'
+      setTimeout(() => {
+        tooltip.style.opacity = '0'
+      }, 2500)
+    }
+  }, 500)
+
   loadMemories()
 </script>
 </body>
