@@ -95,26 +95,30 @@
 </div>
 
 <script src="script.js"></script>
-<script src="supabase.js"></script>
 <script>
-  let supabaseClient = null
-  let allMemories = []
-
-  function initSupabaseClient() {
-    if (typeof supabase !== 'undefined' && supabase.createClient) {
-      supabaseClient = supabase.createClient(
-        'https://jzxlvwxekcrnqsfwxnny.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGx2d3hla2NybnFzZnd4bm55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNTUxNzAsImV4cCI6MjA5MzczMTE3MH0.uDrBInXP3i8GvGxaNCQey-T3uDidUfeBsr6PUFFTJyQ'
-      )
-      loadMemories()
-    } else {
-      setTimeout(initSupabaseClient, 200)
+  // Supabase configuration - same as supabase.js but local
+  const SUPABASE_URL = 'https://jzxlvwxekcrnqsfwxnny.supabase.co'
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGx2d3hla2NybnFzZnd4bm55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNTUxNzAsImV4cCI6MjA5MzczMTE3MH0.uDrBInXP3i8GvGxaNCQey-T3uDidUfeBsr6PUFFTJyQ'
+  
+  let _supabaseClient = null
+  
+  function getSupabase() {
+    if (!_supabaseClient && typeof supabase !== 'undefined' && supabase.createClient) {
+      _supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     }
+    return _supabaseClient
   }
 
+  let allMemories = []
+
   async function loadMemories() {
+    const client = getSupabase()
+    if (!client) {
+      setTimeout(loadMemories, 200)
+      return
+    }
     document.getElementById('memoriesContainer').innerHTML = '<div class="loading-spinner">💗 بيتم تحميل الذكريات 💗</div>'
-    const { data, error } = await supabaseClient
+    const { data, error } = await client
       .from('memories')
       .select('*')
       .order('created_at', { ascending: false })
@@ -180,7 +184,12 @@
       alert('اكتبي الذكرى الأول')
       return
     }
-    const { error } = await supabaseClient
+    const client = getSupabase()
+    if (!client) {
+      alert('في مشكلة في الاتصال بقاعدة البيانات')
+      return
+    }
+    const { error } = await client
       .from('memories')
       .insert([{ memory_text: text, memory_emoji: emoji, memory_date: date, writer_name: writer }])
     if (!error) {
@@ -196,7 +205,8 @@
     }
   })
 
-  initSupabaseClient()
+  // Start loading
+  loadMemories()
 </script>
 </body>
 </html>
