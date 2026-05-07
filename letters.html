@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>رسائل الحب | You & Me 💗</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .letter-card {
+      background: linear-gradient(135deg, #1A1A1A 0%, #222 100%);
+      border-radius: 32px;
+      padding: 32px;
+      margin-bottom: 24px;
+      border: 1px solid #D4A57433;
+    }
+    .english-letter {
+      font-family: monospace;
+      direction: ltr;
+      text-align: left;
+    }
+    .private-message-area {
+      margin-top: 48px;
+      background: #0D0D0D;
+      border-radius: 32px;
+      padding: 32px;
+      border: 2px dashed #D4A574;
+    }
+    textarea {
+      width: 100%;
+      padding: 16px;
+      background: #1A1A1A;
+      border: 1px solid #333;
+      border-radius: 24px;
+      color: #F5F5F5;
+      font-family: inherit;
+      margin: 16px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="nav-logo">💗 You & Me</div>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="memories.html">🗺️ الذكريات</a>
+    <a href="letters.html">💌 رسائل</a>
+    <a href="countdown.html">⏳ عد تنازلي</a>
+    <a href="about.html">📖 عننا</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="heart-big">💌🦅</div>
+  <div class="title">رسائل الحب</div>
+  <div class="subtitle">كل كلمة جاية من القلب ليكي</div>
+
+  <div class="letter-card">
+    <div class="memory-emoji">🕊️</div>
+    <div class="memory-text" style="font-size: 20px;">I wrote this with the same hand I wish would hold yours one day</div>
+    <div class="memory-footer">أحمد</div>
+  </div>
+
+  <div class="letter-card">
+    <div class="memory-emoji">💗</div>
+    <div class="memory-text">أنا هنا من أجلك مهما حدث</div>
+    <div class="memory-footer">أحمد</div>
+  </div>
+
+  <div class="letter-card">
+    <div class="memory-emoji">🦅</div>
+    <div class="memory-text">لسه بدري بس هنوصله</div>
+    <div class="memory-footer">وعد لسه مكتوب</div>
+  </div>
+
+  <div class="letter-card">
+    <div class="memory-emoji">😭💗</div>
+    <div class="memory-text">مش خسارة فيك الحب يا أحمد والله</div>
+    <div class="memory-footer">حبيبة</div>
+  </div>
+
+  <div class="private-message-area">
+    <h3 style="color: #D4A574;">💌 رسالة خاصة ليك</h3>
+    <textarea id="privateMessage" rows="4" placeholder="اكتبي رسالة ل أحمد هنا..."></textarea>
+    <button class="btn" id="sendPrivateBtn">💗 أرسلي الرسالة</button>
+    <p id="privateFeedback" style="margin-top: 16px; color: #D4A574;"></p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>كل رسالة هنا بتفضل في قلبي للأبد 💗</p>
+</div>
+
+<script src="script.js"></script>
+<script>
+  const savedMsg = localStorage.getItem('loveMessageToAhmed')
+  if (savedMsg) {
+    document.getElementById('privateFeedback').innerHTML = 'شكراً حبيبة كلامك وصل قلب أحمد 💗'
+  }
+  document.getElementById('sendPrivateBtn').addEventListener('click', () => {
+    const msg = document.getElementById('privateMessage').value
+    if (msg.trim()) {
+      localStorage.setItem('loveMessageToAhmed', msg)
+      document.getElementById('privateFeedback').innerHTML = 'شكراً حبيبة كلامك وصل قلب أحمد 💗'
+      document.getElementById('privateMessage').value = ''
+    } else {
+      alert('اكتبي رسالة جميلة يا روحي 💗')
+    }
+  })
+</script>
+</body>
+</html>

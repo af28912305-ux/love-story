@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>You & Me | حكايتنا لسه بتكتب 💗</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 48px 0;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: #1A1A1A;
+      padding: 24px;
+      border-radius: 24px;
+      text-align: center;
+      min-width: 140px;
+    }
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      color: #D4A574;
+    }
+    .floating-heart {
+      text-align: center;
+      font-size: 64px;
+      margin: 32px 0;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .floating-heart:active {
+      transform: scale(0.9);
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="nav-logo">💗 You & Me</div>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="memories.html">🗺️ الذكريات</a>
+    <a href="letters.html">💌 رسائل</a>
+    <a href="countdown.html">⏳ عد تنازلي</a>
+    <a href="about.html">📖 عننا</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="heart-big">💗</div>
+  <div class="title">أهلاً يا حبيبة 💗</div>
+  <div class="subtitle">أنا هنا من أجلك مهما حدث</div>
+
+  <div class="floating-heart" id="clickHeart">🦅💗</div>
+
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-number">4</div>
+      <div>سنين حب صامت</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4</div>
+      <div>أسابيع حب معلن</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">34</div>
+      <div>ذكرى مسجلة</div>
+    </div>
+  </div>
+
+  <div style="background: #1A1A1A; border-radius: 24px; padding: 32px; text-align: center; margin: 32px 0;">
+    <p style="font-size: 20px; margin-bottom: 16px;">مش خسارة فيك الحب يا أحمد والله 😭💗</p>
+    <p style="color: #D4A574;">حبيبة قالتها وفضلت في قلبي للأبد</p>
+  </div>
+
+  <div style="display: grid; gap: 16px; margin-top: 32px;">
+    <div style="background: #1A1A1A; border-radius: 20px; padding: 20px; border-right: 3px solid #D4A574;">
+      🕊️ أول لقاء في حصة التجويد سنة 2021
+    </div>
+    <div style="background: #1A1A1A; border-radius: 20px; padding: 20px; border-right: 3px solid #C77A8A;">
+      💌 أول رسالة: حبيبي بس مين
+    </div>
+    <div style="background: #1A1A1A; border-radius: 20px; padding: 20px; border-right: 3px solid #D4A574;">
+      🎁 6/5/2026 تاريخ الهدايا المتبادلة
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>من قلب أحمد لحبيبة 💗</p>
+</div>
+
+<script src="script.js"></script>
+<script>
+  const heart = document.getElementById('clickHeart')
+  if (heart) {
+    heart.addEventListener('click', () => {
+      alert('قلبي بينبض من فرحة وجودك 💗')
+    })
+  }
+</script>
+</body>
+</html>

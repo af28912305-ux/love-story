@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>خريطة الذكريات | You & Me 💗</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .add-btn-fixed {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #D4A574;
+      color: #0D0D0D;
+      border: none;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: 0.2s;
+    }
+    .add-btn-fixed:active {
+      transform: scale(0.9);
+    }
+    .memory-count {
+      background: #D4A57422;
+      padding: 8px 16px;
+      border-radius: 40px;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+    .loading-spinner {
+      text-align: center;
+      padding: 48px;
+      color: #D4A574;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="nav-logo">💗 You & Me</div>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="memories.html">🗺️ الذكريات</a>
+    <a href="letters.html">💌 رسائل</a>
+    <a href="countdown.html">⏳ عد تنازلي</a>
+    <a href="about.html">📖 عننا</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="heart-big">🗺️💗</div>
+  <div class="title">خريطة الذكريات</div>
+  <div class="subtitle">كل ذكرى منكم حكاية حب مش هتتنسى</div>
+
+  <div class="search-filter">
+    <input type="text" id="searchInput" placeholder="🔍 ابحثي في الذكريات">
+    <select id="yearFilter">
+      <option value="all">كل السنوات</option>
+      <option value="2021">2021</option>
+      <option value="2024">2024</option>
+      <option value="2025">2025</option>
+      <option value="2026">2026</option>
+    </select>
+  </div>
+
+  <div id="memoriesContainer">
+    <div class="loading-spinner">💗 بيتم تحميل الذكريات 💗</div>
+  </div>
+</div>
+
+<button class="add-btn-fixed" id="openModalBtn">➕</button>
+
+<div id="addMemoryModal" class="modal">
+  <div class="modal-content">
+    <h3 style="color: #D4A574; margin-bottom: 20px;">➕ ضيفي ذكرى جديدة</h3>
+    <input type="text" id="memoryTextInput" placeholder="اكتبي الذكرى">
+    <input type="text" id="memoryEmojiInput" placeholder="ايموجي للذكرى (زي 💗)">
+    <input type="text" id="memoryDateInput" placeholder="السنة (زي 2026)">
+    <input type="text" id="writerNameInput" placeholder="اسمك">
+    <div style="display: flex; gap: 12px; margin-top: 20px;">
+      <button class="btn" id="saveMemoryBtn">💾 أضيفي</button>
+      <button class="btn btn-outline" id="closeModalBtn">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>كل ذكرى هنا عشان تفضل حية للأبد 💗</p>
+</div>
+
+<script src="script.js"></script>
+<script src="supabase.js"></script>
+<script>
+  let supabaseClient = null
+  let allMemories = []
+
+  function initSupabaseClient() {
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+      supabaseClient = supabase.createClient(
+        'https://jzxlvwxekcrnqsfwxnny.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGx2d3hla2NybnFzZnd4bm55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNTUxNzAsImV4cCI6MjA5MzczMTE3MH0.uDrBInXP3i8GvGxaNCQey-T3uDidUfeBsr6PUFFTJyQ'
+      )
+      loadMemories()
+    } else {
+      setTimeout(initSupabaseClient, 200)
+    }
+  }
+
+  async function loadMemories() {
+    document.getElementById('memoriesContainer').innerHTML = '<div class="loading-spinner">💗 بيتم تحميل الذكريات 💗</div>'
+    const { data, error } = await supabaseClient
+      .from('memories')
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (!error && data) {
+      allMemories = data
+      displayMemories(allMemories)
+    } else {
+      document.getElementById('memoriesContainer').innerHTML = '<div class="loading-spinner">عذراً في مشكلة في التحميل 🕯️</div>'
+    }
+  }
+
+  function displayMemories(memories) {
+    const container = document.getElementById('memoriesContainer')
+    if (!memories.length) {
+      container.innerHTML = '<div class="loading-spinner">مفيش ذكريات لسة ضيفي أول ذكرى 💗</div>'
+      return
+    }
+    let html = `<div class="memory-count">📖 عدد الذكريات ${memories.length} ذكرى</div><div class="memories-grid">`
+    for (let m of memories) {
+      html += `
+        <div class="memory-card">
+          <div class="memory-emoji">${m.memory_emoji || '💗'}</div>
+          <div class="memory-text">${m.memory_text}</div>
+          <div class="memory-footer">
+            <span>📅 ${m.memory_date || 'تاريخ غير محدد'}</span>
+            <span>✍️ ${m.writer_name || 'زائر'}</span>
+          </div>
+        </div>
+      `
+    }
+    html += `</div>`
+    container.innerHTML = html
+  }
+
+  function filterMemories() {
+    const search = document.getElementById('searchInput').value.toLowerCase()
+    const year = document.getElementById('yearFilter').value
+    let filtered = allMemories.filter(m => {
+      const matchSearch = m.memory_text.toLowerCase().includes(search)
+      const matchYear = year === 'all' || m.memory_date === year
+      return matchSearch && matchYear
+    })
+    displayMemories(filtered)
+  }
+
+  document.getElementById('searchInput').addEventListener('input', filterMemories)
+  document.getElementById('yearFilter').addEventListener('change', filterMemories)
+
+  document.getElementById('openModalBtn').addEventListener('click', () => {
+    document.getElementById('addMemoryModal').classList.add('show')
+  })
+
+  document.getElementById('closeModalBtn').addEventListener('click', () => {
+    document.getElementById('addMemoryModal').classList.remove('show')
+  })
+
+  document.getElementById('saveMemoryBtn').addEventListener('click', async () => {
+    const text = document.getElementById('memoryTextInput').value
+    const emoji = document.getElementById('memoryEmojiInput').value || '💗'
+    const date = document.getElementById('memoryDateInput').value || '2026'
+    const writer = document.getElementById('writerNameInput').value || 'زائر'
+    if (!text.trim()) {
+      alert('اكتبي الذكرى الأول')
+      return
+    }
+    const { error } = await supabaseClient
+      .from('memories')
+      .insert([{ memory_text: text, memory_emoji: emoji, memory_date: date, writer_name: writer }])
+    if (!error) {
+      document.getElementById('addMemoryModal').classList.remove('show')
+      document.getElementById('memoryTextInput').value = ''
+      document.getElementById('memoryEmojiInput').value = ''
+      document.getElementById('memoryDateInput').value = ''
+      document.getElementById('writerNameInput').value = ''
+      loadMemories()
+      alert('تم إضافة الذكرى شكراً لمشاركتك 💗')
+    } else {
+      alert('حصل خطأ حاولي تاني')
+    }
+  })
+
+  initSupabaseClient()
+</script>
+</body>
+</html>

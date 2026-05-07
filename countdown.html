@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>عد تنازلي | You & Me 💗</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="nav-logo">💗 You & Me</div>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="memories.html">🗺️ الذكريات</a>
+    <a href="letters.html">💌 رسائل</a>
+    <a href="countdown.html">⏳ عد تنازلي</a>
+    <a href="about.html">📖 عننا</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="heart-big">⏳💗</div>
+  <div class="title">لسه بدري بس هنوصله</div>
+  <div class="subtitle">عد تنازلي لأول ذكرى مرور سنة على الاعتراف</div>
+
+  <div class="countdown-numbers" id="countdownBox">
+    <div class="countdown-box"><div class="countdown-number" id="days">00</div><div>يوم</div></div>
+    <div class="countdown-box"><div class="countdown-number" id="hours">00</div><div>ساعة</div></div>
+    <div class="countdown-box"><div class="countdown-number" id="minutes">00</div><div>دقيقة</div></div>
+    <div class="countdown-box"><div class="countdown-number" id="seconds">00</div><div>ثانية</div></div>
+  </div>
+
+  <div style="text-align: center; margin-top: 32px;">
+    <p style="color: #D4A574;">تاريخ 6 مايو 2026</p>
+    <p style="color: #A3A3A3;">اليوم اللي هنفتكره طول العمر 💗</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>كل ثانية بتعدي بتقربنا لبعض أكتر 💗</p>
+</div>
+
+<script src="script.js"></script>
+<script>
+  function updateCountdown() {
+    const targetDate = new Date(2026, 4, 6, 0, 0, 0)
+    const now = new Date()
+    const diff = targetDate - now
+    if (diff <= 0) {
+      document.getElementById('days').innerText = '00'
+      document.getElementById('hours').innerText = '00'
+      document.getElementById('minutes').innerText = '00'
+      document.getElementById('seconds').innerText = '00'
+      return
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((diff % (86400000)) / (1000 * 60 * 60))
+    const minutes = Math.floor((diff % (3600000)) / (1000 * 60))
+    const seconds = Math.floor((diff % (60000)) / 1000)
+    document.getElementById('days').innerText = days < 10 ? '0' + days : days
+    document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours
+    document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes
+    document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds
+  }
+  setInterval(updateCountdown, 1000)
+  updateCountdown()
+</script>
+</body>
+</html>
