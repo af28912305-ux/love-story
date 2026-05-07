@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>رسائل الحب | You & Me 💗</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     .letter-card {
       background: linear-gradient(135deg, #1A1A1A 0%, #222 100%);
@@ -14,11 +14,6 @@
       margin-bottom: 24px;
       border: 1px solid #D4A57433;
     }
-    .english-letter {
-      font-family: monospace;
-      direction: ltr;
-      text-align: left;
-    }
     .private-message-area {
       margin-top: 48px;
       background: #0D0D0D;
@@ -26,7 +21,7 @@
       padding: 32px;
       border: 2px dashed #D4A574;
     }
-    textarea {
+    textarea, input {
       width: 100%;
       padding: 16px;
       background: #1A1A1A;
@@ -34,7 +29,17 @@
       border-radius: 24px;
       color: #F5F5F5;
       font-family: inherit;
-      margin: 16px 0;
+      margin: 12px 0;
+    }
+    .success-msg {
+      color: #D4A574;
+      margin-top: 16px;
+      text-align: center;
+    }
+    .error-msg {
+      color: #ff6b6b;
+      margin-top: 16px;
+      text-align: center;
     }
   </style>
 </head>
@@ -81,32 +86,61 @@
   </div>
 
   <div class="private-message-area">
-    <h3 style="color: #D4A574;">💌 رسالة خاصة ليك</h3>
-    <textarea id="privateMessage" rows="4" placeholder="اكتبي رسالة ل أحمد هنا..."></textarea>
-    <button class="btn" id="sendPrivateBtn">💗 أرسلي الرسالة</button>
-    <p id="privateFeedback" style="margin-top: 16px; color: #D4A574;"></p>
+    <h3 style="color: #D4A574;">💌 رسالة خاصة ليك يا أحمد</h3>
+    <input type="text" id="senderName" placeholder="اسمك">
+    <input type="email" id="senderEmail" placeholder="ايميلك (عشان أقدر أرد عليكي)">
+    <textarea id="loveMessage" rows="4" placeholder="اكتبي رسالتك ل أحمد هنا..."></textarea>
+    <button class="btn" id="sendEmailBtn">💗 أرسلي الرسالة</button>
+    <div id="messageStatus"></div>
   </div>
 </div>
 
 <div class="footer">
-  <p>كل رسالة هنا بتفضل في قلبي للأبد 💗</p>
+  <p>كل رسالة هنا بتوصلني على طول 💗</p>
 </div>
 
 <script src="script.js"></script>
 <script>
-  const savedMsg = localStorage.getItem('loveMessageToAhmed')
-  if (savedMsg) {
-    document.getElementById('privateFeedback').innerHTML = 'شكراً حبيبة كلامك وصل قلب أحمد 💗'
-  }
-  document.getElementById('sendPrivateBtn').addEventListener('click', () => {
-    const msg = document.getElementById('privateMessage').value
-    if (msg.trim()) {
-      localStorage.setItem('loveMessageToAhmed', msg)
-      document.getElementById('privateFeedback').innerHTML = 'شكراً حبيبة كلامك وصل قلب أحمد 💗'
-      document.getElementById('privateMessage').value = ''
-    } else {
-      alert('اكتبي رسالة جميلة يا روحي 💗')
+  // EmailJS Configuration - تم إضافة بياناتك
+  (function() {
+    emailjs.init("ZBwJrIdXEctL9TQ0Q") // Public Key
+  })()
+
+  const serviceID = "service_8wmw7tw" // Service ID
+  const templateID = "template_t9350fj" // Template ID
+
+  document.getElementById('sendEmailBtn').addEventListener('click', function() {
+    const name = document.getElementById('senderName').value
+    const email = document.getElementById('senderEmail').value
+    const message = document.getElementById('loveMessage').value
+    const statusDiv = document.getElementById('messageStatus')
+
+    if (!name || !email || !message) {
+      statusDiv.innerHTML = '<div class="error-msg">💔 اكتبي كل البيانات الأول يا روحي</div>'
+      return
     }
+
+    statusDiv.innerHTML = '<div class="success-msg">💗 بيتم إرسال رسالتك...</div>'
+
+    const templateParams = {
+      writer_name: name,
+      writer_email: email,
+      message: message,
+      to_name: "أحمد",
+      reply_to: email
+    }
+
+    emailjs.send(serviceID, templateID, templateParams)
+      .then(function(response) {
+        console.log("Success:", response)
+        statusDiv.innerHTML = '<div class="success-msg">✅ رسالتك وصلت لأحمد 💗</div>'
+        document.getElementById('senderName').value = ''
+        document.getElementById('senderEmail').value = ''
+        document.getElementById('loveMessage').value = ''
+      }, function(error) {
+        console.log("Error:", error)
+        statusDiv.innerHTML = '<div class="error-msg">❌ في مشكلة في الإرسال حاولي تاني</div>'
+      })
   })
 </script>
 </body>
